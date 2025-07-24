@@ -1,0 +1,4 @@
+.venv/
+model/
+output/
+ResNet18_onnx/

@@ -1,0 +1,45 @@
+# requirements.txt (GPU 버전)
+# 
+# 설치 순서:
+# 1. pip install torch==2.1.0+cu121 torchaudio==2.1.0+cu121 --extra-index-url https://download.pytorch.org/whl/cu121
+# 2. pip install git+https://github.com/facebookresearch/demucs.git --no-deps
+# 3. pip install git+https://github.com/facebookresearch/dora.git --no-deps
+# 4. pip install -r requirements-gpu.txt (나머지 의존성들)
+#
+# 또는 아래 내용으로 한번에 설치
+
+# PyTorch 및 관련 라이브러리 (CUDA 12.1 버전)
+torch==2.1.0+cu121           
+torchaudio==2.1.0+cu121
+--extra-index-url https://download.pytorch.org/whl/cu121
+
+# Demucs 필수 의존성
+numpy==1.24.0
+scipy>=1.7.0
+librosa>=0.10.0
+einops>=0.6.0
+julius>=0.2.6
+lameenc>=1.4.2
+openunmix>=1.2.1
+hydra-core>=1.1.0
+hydra-colorlog>=1.1.0
+flashy>=0.0.1
+retrying>=1.3.3
+
+# 추가 필요 라이브러리
+noisereduce>=2.0.1
+sounddevice>=0.4.6
+omegaconf>=2.2.2
+
+# Dora 필수 의존성
+submitit>=1.4.0
+cloudpickle>=2.0.0
+treetable>=0.2.0
+
+# 주의: demucs와 dora-search는 별도로 설치해야 함
+# pip install git+https://github.com/adefossez/demucs.git --no-deps
+# pip install git+https://github.com/facebookresearch/dora.git --no-deps
+
+#onnx 관련
+onnx
+onnxruntime
