@@ -1,0 +1,39 @@
+{
+  "pipeline_info": {
+    "input_wav_file": "test01/mixture.wav",
+    "target_parts": [
+      "fan",
+      "pump"
+    ],
+    "generated_pt_files": [
+      "output\\2025-07-25_01-54-50_mic_1_fan.pt",
+      "output\\2025-07-25_01-54-50_mic_1_pump.pt"
+    ],
+    "timestamp": "2025-07-25 01:55:00"
+  },
+  "analysis_results": {
+    "device_name": "machine_001",
+    "analyzed_parts": [
+      "fan",
+      "pump"
+    ],
+    "total_parts": 2,
+    "anomaly_count": 1,
+    "results": [
+      {
+        "part_name": "fan",
+        "pt_file_path": "output\\2025-07-25_01-54-50_mic_1_fan.pt",
+        "device_name": "machine_001",
+        "anomaly_detected": true,
+        "anomaly_probability": 0.999
+      },
+      {
+        "part_name": "pump",
+        "pt_file_path": "output\\2025-07-25_01-54-50_mic_1_pump.pt",
+        "device_name": "machine_001",
+        "anomaly_detected": false,
+        "anomaly_probability": 0.156
+      }
+    ]
+  }
+}

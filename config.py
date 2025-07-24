@@ -11,11 +11,6 @@ OUTPUT_FOLDER = "output"
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 SOURCES = ["fan", "pump", "slider", "bearing", "gearbox", "noise"]  # 모델에 따라 조정 (noise 추가)
 FORCE_STEREO_INPUT = True  # 모델이 2채널 입력을 요구함
-CHANNELS = 2
-CHANNEL_PARTS = [
-    ['fan', 'pump'],              # 채널 0 (noise는 저장하지 않음)
-    ['bearing', 'gearbox', 'slider']  # 채널 1 (noise는 저장하지 않음)
-]
 
 # RMS 정규화 설정
 TARGET_RMS_DB = -12.0  # 목표 RMS 레벨 (dB)

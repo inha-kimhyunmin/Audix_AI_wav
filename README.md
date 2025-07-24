@@ -1,24 +1,5 @@
-# Audix Prepr## 🔄 처리 흐름
+# Audix Preprocessing System
 
-1. *## 🔧 잡음 제거 방식
-
-본 시스템은 **Spectral Gating 기법을 사용하지 않습니다**. 대신 다음과 같은 방식으로 오디오를 전처리합니다:
-
-- ❌ **Spectral Gating 미사용**: `noisereduce` 라이브러리의 spectral gating 기법 제거
-- ✅ **적응적 레벨 조정 사용**: 
-  - 🔊 **작은 소리 증폭**: RMS가 낮은 오디오는 최대 20dB까지 증폭
-  - 🔇 **큰 소리 압축**: 임계값(0.7) 이상의 큰 소리는 3:1 비율로 소프트 압축
-  - 📊 **적절한 범위**: ±3dB 내에서 미세 조정
-- ✅ **Demucs 모델**: 조정된 오디오를 Demucs 모델로 소스 분리
-  - **분리 소스**: `fan`, `pump`, `slider`, `bearing`, `gearbox`, `noise` (총 6개)
-  - **저장 소스**: `fan`, `pump`, `slider`, `bearing`, `gearbox` (5개, noise 제외)드** → 모노 채널, 10초, 44.1kHz로 정규화
-2. **스테레오 변환** → 모델 요구사항에 맞춰 2채널로 복제
-3. **적응적 레벨 조정** → 작은 소리는 증폭, 큰 소리는 압축하여 -12dB 레벨로 조정
-4. **소스 분리** → Demucs 모델로 6개 소스 분리 (`fan`, `pump`, `slider`, `bearing`, `gearbox`, `noise`)
-5. **선택적 저장** → `noise`를 제외한 5개 소스만 Mel spectrogram으로 변환하여 저장
-6. **JSON 결과** → 저장된 파일 정보를 JSON으로 반환
-
-> **참고**: 모델은 6개 소스를 분리하지만, `noise`는 저장하지 않고 5개 기계 부품 소리만 저장합니다.
 이 프로젝트는 **WAV 파일을 입력받아** Demucs 모델로 소리를 분리하고 Mel spectrogram으로 변환하여 저장하는 오디오 전처리 시스템입니다.
 
 ## 🎵 입력 파일 형식
@@ -30,24 +11,27 @@
 
 > **참고**: 이 시스템은 실시간 녹음이 아닌 **사전에 녹음된 WAV 파일을 처리**합니다.
 
-## � 처리 흐름
+## 🔄 처리 흐름
 
 1. **WAV 파일 로드** → 모노 채널, 10초, 44.1kHz로 정규화
 2. **스테레오 변환** → 모델 요구사항에 맞춰 2채널로 복제
-3. **RMS 정규화** → -12dB 레벨로 볼륨 조정
+3. **적응적 레벨 조정** → 작은 소리는 증폭, 큰 소리는 압축하여 -12dB 레벨로 조정
 4. **소스 분리** → Demucs 모델로 6개 소스 분리 (`fan`, `pump`, `slider`, `bearing`, `gearbox`, `noise`)
 5. **선택적 저장** → `noise`를 제외한 5개 소스만 Mel spectrogram으로 변환하여 저장
 6. **JSON 결과** → 저장된 파일 정보를 JSON으로 반환
 
 > **참고**: 모델은 6개 소스를 분리하지만, `noise`는 저장하지 않고 5개 기계 부품 소리만 저장합니다.
 
-## �🔧 잡음 제거 방식
+## 🔧 잡음 제거 방식
 
 본 시스템은 **Spectral Gating 기법을 사용하지 않습니다**. 대신 다음과 같은 방식으로 오디오를 전처리합니다:
 
 - ❌ **Spectral Gating 미사용**: `noisereduce` 라이브러리의 spectral gating 기법 제거
-- ✅ **RMS 정규화 사용**: 오디오 신호를 -12dB RMS 레벨로 정규화하여 일관된 볼륨 유지
-- ✅ **Demucs 모델**: 정규화된 오디오를 Demucs 모델로 소스 분리
+- ✅ **적응적 레벨 조정 사용**: 
+  - 🔊 **작은 소리 증폭**: RMS가 낮은 오디오는 최대 20dB까지 증폭
+  - 🔇 **큰 소리 압축**: 임계값(0.7) 이상의 큰 소리는 3:1 비율로 소프트 압축
+  - 📊 **적절한 범위**: ±3dB 내에서 미세 조정
+- ✅ **Demucs 모델**: 조정된 오디오를 Demucs 모델로 소스 분리
   - **분리 소스**: `fan`, `pump`, `slider`, `bearing`, `gearbox`, `noise` (총 6개)
   - **저장 소스**: `fan`, `pump`, `slider`, `bearing`, `gearbox` (5개, noise 제외)
 
@@ -155,18 +139,22 @@ def process_multiple_wav_files(model, source_names, wav_paths):
 ## 주요 기능
 
 1. **WAV 파일 입력**: 10초 길이, 44.1kHz, 모노 채널 WAV 파일 처리
-2. **RMS 정규화**: 입력 오디오를 -12dB RMS 레벨로 정규화
-3. **소리 분리**: Demucs 모델을 사용한 소스 분리
-4. **Mel Spectrogram 변환**: 분리된 오디오를 Mel spectrogram으로 변환
-5. **JSON 결과 출력**: 처리 결과를 JSON 형식으로 반환
+2. **적응적 레벨 조정**: 작은 소리 증폭 및 큰 소리 압축으로 일관된 볼륨 유지
+3. **소리 분리**: Demucs 모델을 사용한 6개 소스 분리 (5개 저장)
+4. **Mel Spectrogram 변환**: 분리된 오디오를 240x240 mel spectrogram으로 변환
+5. **ONNX 이상 감지**: 각 부품별 이상 감지 수행
+6. **JSON 결과 출력**: 처리 결과 및 이상 감지 결과를 JSON 형식으로 반환
 
-## 변경사항 (v2.0)
+## 변경사항 (v3.0)
 
-- ❌ **Spectral Gating 잡음 제거 제거**: noisereduce 라이브러리를 사용한 잡음 제거 기능 제거
-- ✅ **RMS 정규화 추가**: 오디오를 -12dB RMS 레벨로 정규화하여 일관된 볼륨 유지
-- ✅ **WAV 파일 입력**: 실시간 녹음 대신 WAV 파일을 입력받아 처리
-- ✅ **파일명 형식 변경**: `시간_마이크명_부품명.pt` 형식으로 출력 파일 저장
-- ✅ **JSON 결과 반환**: 처리 결과를 구조화된 JSON으로 반환
+- ❌ **Spectral Gating 제거**: noisereduce 라이브러리를 사용한 잡음 제거 기능 완전 제거
+- ✅ **적응적 레벨 조정 도입**: RMS 기반 단순 정규화를 적응적 레벨 조정으로 대체
+  - 작은 소리 증폭 (최대 20dB)
+  - 큰 소리 압축 (3:1 비율)
+  - 미세 조정 (±3dB)
+- ✅ **ONNX 모델 연동**: Mel spectrogram을 ONNX 모델에 입력하여 이상 감지 수행
+- ✅ **통합 분석 시스템**: WAV → 분리 → 분류의 완전한 파이프라인 구축
+- ✅ **향상된 JSON 출력**: 이상 감지 결과 및 확률값 포함
 
 ## 설정 (config.py)
 
@@ -183,131 +171,263 @@ RMS_EPSILON = 1e-9          # 0으로 나누기 방지용 작은 값
 - **MAX_GAIN_DB**: 작은 소리 증폭 시 최대 게인 제한
 - **COMPRESSION_THRESHOLD**: 이 값 이상의 크기를 가진 신호는 압축 적용
 
-기본 라이브러리 
+## 🤖 ONNX 모델 연동
 
-- numpy 배열 사용을 위한 numpy
-- PyTorch 사용을 위한 torch
-- PyTorch 형식으로 오디오 처리를 위한 torchaudio (mel spectrogram 변환에 사용)
+### ONNX 모델 개요
 
-## 1. sounddevice 라이브러리에서 입력이 들어오는 구조
+분리된 mel spectrogram (.pt 파일)을 ONNX 모델에 입력하여 이상 감지를 수행합니다.
 
-오디오 인터페이스(여러 개의 마이크 입력을 받는 장치)에서는 아날로그 마이크 신호를 디지털 데이터로 변환한다. 이를 지속적으로 스트림으로 넘겨주는 형태
+### 입력 형식
 
-간단하게 하자면 배열에서의 인덱스 값이 주기적으로 계속해서 넘어온다.
+**파일**: `.pt` 파일 (mel spectrogram)
+- **크기**: `(1, 240, 240)` 또는 `(240, 240)`
+- **타입**: `float32`
+- **형태**: Mel spectrogram tensor
 
-그러면 sounddevice는 오디오 입력의 채널 수(마이크 개수), 샘플링 레이트(Hz), 샘플 길이(sampling rate * time) 에 맞춰 버퍼 할당 후
-
-각 버퍼로 입력들이 들어온다.
-
-[디지털 변환 과정 세부 설명](https://www.notion.so/2328f8ab094e80b198aadeb260e7300b?pvs=21)
-
-record.py
+### ONNX 모델 처리 과정
 
 ```python
-import sounddevice as sd
-import numpy as np
-from config import SAMPLE_RATE, SEGMENT_DURATION
-
-def record_segment():
+def predict_single_file_onnx_json(onnx_model_path, pt_file_path, device_name, in_ch=1, threshold=0.5):
     """
-    오디오 세그먼트를 녹음합니다.
-    :return: 녹음된 오디오 데이터 (numpy 배열)
-    """
-    device_info = sd.query_devices(kind='input')
-    channels = device_info['max_input_channels']  # type: ignore
-    print(f"🎙 녹음 시작 (채널: {channels})")
-    audio = sd.rec(int(SAMPLE_RATE * SEGMENT_DURATION), samplerate=SAMPLE_RATE,
-                   channels=channels, dtype='float32')
-    sd.wait()
-    return audio  # [samples, channels]
-
-```
-
-여기 함수에서는 리턴값은 numpy 2차원 배열 ([[1,2,3,4,5],[6,8,4,1,2],[1,8,9,0,1]] 하나의 배열이 채널 하나 총 3개의 배열 → 3채널)
-
-오디오 입력을 받고, for문을 돌려서 뒤의 과정은 채널별로 각각 수행
-
-반복 횟수는 채널 개수만큼
-
-main.py
-
-```python
-from config import NOISE_SAMPLE_PATH
-from record import record_segment
-from denoise import load_noise_clip, denoise
-from model import load_model, separate
-from mel import save_mel_tensor
-
-def process_stream(model, repeat=5):
-    """
-    스트림을 처리하고 오디오를 녹음, 잡음 제거, 분리 및 저장합니다.
+    단일 .pt 파일에 대해 ONNX 모델로 이상 감지를 수행합니다.
     
-    :param model: 분리 모델
-    :param repeat: 반복 횟수
-    :return: None
+    Args:
+        onnx_model_path: ONNX 모델 파일 경로
+        pt_file_path: 입력 .pt 파일 경로 (mel spectrogram)
+        device_name: 장치명
+        in_ch: 입력 채널 수 (기본값: 1)
+        threshold: 이상 감지 임계값 (기본값: 0.5)
+    
+    Returns:
+        dict: JSON 형태의 예측 결과
     """
-    noise_clip = load_noise_clip()
-    for idx in range(repeat):
-        audio = record_segment()
-        for mic_idx in range(audio.shape[1]): #여기서 각 채널별로 전처리 진행
-            print(f"\n🎧 마이크 {mic_idx} 처리 중")
-            clean = denoise(audio[:, mic_idx], noise_clip)
-            sources = separate(model, clean)
-            for src_idx, src in enumerate(sources):
-                save_mel_tensor(src, mic_idx, src_idx, idx)
-
-if __name__ == "__main__":
-    model = load_model()
-    process_stream(model, repeat=100) # 10초 * 100회 = 1000초 (약 16분)
-
 ```
 
-## 2. 전처리 - 1 Spectral Gating
+#### 1. **전처리 단계**
+```python
+# .pt 파일 로드
+x = torch.load(pt_file_path).float()
 
-환경 잡음 제거 - Spectral Gating  기법 사용 - noisereduce 라이브러리 사용
+# 차원 조정
+if x.ndim == 2:
+    x = x.unsqueeze(0)  # [H, W] → [1, H, W]
 
-환경 잡음(noise sample)을 추출하기 위해 기계 소리 녹음 전 환경 소리를 녹음하는 과정이 필요하다. 이를 noise sample로 저장(.pt파일로)
+# 채널 수 맞추기
+if x.shape[0] != in_ch:
+    x = x.repeat(in_ch, 1, 1)
 
-### 입력 :  1차원 numpy 배열
+# 배치 차원 추가 및 numpy 변환
+x = x.unsqueeze(0).numpy().astype(np.float32)  # [1, C, H, W]
+```
 
-각 채널마다의 numpy배열을 주파수 스펙트럼으로 변환(STFT 기법이 있음)
+#### 2. **ONNX 추론**
+```python
+# ONNX 세션 생성
+session = ort.InferenceSession(onnx_model_path, providers=['CPUExecutionProvider'])
 
-주파수 스펙트럼에서 noise sample보다 작은 소리들을 전부 제거
+# 추론 실행
+outputs = session.run([output_name], {input_name: x})
+logit = outputs[0][0][0]  # scalar 값
 
-이를 다시 시간 영역으로 변환 
+# Sigmoid 활성화 함수 적용
+prob = float(1 / (1 + np.exp(-logit)))
+```
 
-[Spectral Gating 세부 설명](https://www.notion.so/Spectral-Gating-2328f8ab094e805ab62ef4484e04eb0e?pvs=21)
+### 출력 형식
 
-### 출력 : 1차원 numpy 배열
+**JSON 구조:**
+```json
+{
+  "device_name": "machine_001",
+  "result": true,
+  "probability": 0.942
+}
+```
 
-## 3. 소리 분리 모델 - demucs
+**필드 설명:**
+- **`device_name`**: 장치명 (사용자 입력)
+- **`result`**: 이상 감지 결과 (boolean)
+  - `true`: 이상 감지됨 (probability ≥ threshold)
+  - `false`: 정상 (probability < threshold)
+- **`probability`**: 이상일 확률 (0.0 ~ 1.0)
 
-demucs 라이브러리 사용
+### 통합 분석 시스템
 
-**모델 분리 능력:**
-- **입력**: mixture.wav (혼합 오디오)
-- **출력**: 6개 소스 (`fan`, `pump`, `slider`, `bearing`, `gearbox`, `noise`)
-- **저장**: 5개 소스 (기계 부품만, `noise`는 제외)
+**전체 파이프라인**: `integrated_analysis.py`
 
-pre-trained 모델을 사용할 때에는 그냥 demucs 라이브러리만 설치하면 되는데
+```python
+def process_audio_with_classification(wav_file_path, onnx_model_path, mic_number, device_name):
+    """
+    WAV 파일 → Demucs 분리 → ONNX 분류의 완전한 파이프라인
+    """
+```
 
-따로 훈련한 모델을 사용할 때는 어떤 라이브러리를 추가로 설치해야하는지 모르겠음. 실제로 돌려봐야 알거같음
+#### 실행 예시:
+```python
+# 설정
+WAV_FILE = "test01/mixture.wav"
+ONNX_MODEL = "ResNet18_onnx/fold0_best_model.onnx"
+MIC_NUMBER = 1
+DEVICE_NAME = "machine_001"
 
-### 입력 : 2차원 numpy 배열
+# 통합 처리 실행
+results = process_audio_with_classification(
+    wav_file_path=WAV_FILE,
+    onnx_model_path=ONNX_MODEL,
+    mic_number=MIC_NUMBER,
+    device_name=DEVICE_NAME
+)
+```
 
-훈련한 모델을 불러와서 소스 분리 수행
+#### 통합 결과 JSON:
+```json
+{
+  "input_wav_file": "test01/mixture.wav",
+  "mic_number": 1,
+  "device_name": "machine_001",
+  "total_parts": 5,
+  "anomaly_count": 3,
+  "results": [
+    {
+      "mic_number": 1,
+      "part_name": "fan",
+      "pt_file_path": "output/2025-07-24_15-30-45_mic_1_fan.pt",
+      "device_name": "machine_001",
+      "anomaly_detected": true,
+      "anomaly_probability": 0.942
+    },
+    {
+      "mic_number": 1,
+      "part_name": "pump", 
+      "pt_file_path": "output/2025-07-24_15-30-45_mic_1_pump.pt",
+      "device_name": "machine_001",
+      "anomaly_detected": false,
+      "anomaly_probability": 0.234
+    }
+  ]
+}
+```
 
-### 출력 : tensor 파일 (noise 제외하고 5개)
+### ONNX 모델 요구사항
 
-## 4. Mel Spectrogram 변환 → tensor 파일 변환
+- **런타임**: ONNX Runtime (`pip install onnxruntime`)
+- **실행 환경**: CPU (CPUExecutionProvider)
+- **입력 형태**: `[1, 1, 240, 240]` (batch, channel, height, width)
+- **출력 형태**: `[1, 1]` (batch, logit)
+- **모델 타입**: 이진 분류 모델 (정상/이상)
 
-tensor 파일을 변환한 후 mel spectrogram으로 변환하고, 이를 tensor 파일로 변환함
+## 💻 사용 예시
 
-tensor 파일은 종명이의 요구인 1,240,240 크기로 지정
+### 1. 단일 WAV 파일 처리 (기본)
+```python
+from main import process_wav_file
+from model import load_model
 
-### 입력 : tensor 파일(하나의 오디오 채널의 정보)
+# 모델 로드
+model, source_names = load_model()
 
-### 출력 : tensor 파일(.pt)
+# WAV 파일 처리
+result = process_wav_file(model, source_names, "input_audio.wav")
+
+# 결과 출력
+print(result)
+```
+
+### 2. 통합 분석 (Demucs + ONNX)
+```python
+from integrated_analysis import process_audio_with_classification
+
+# 통합 처리 실행
+results = process_audio_with_classification(
+    wav_file_path="test01/mixture.wav",
+    onnx_model_path="ResNet18_onnx/fold0_best_model.onnx", 
+    mic_number=1,
+    device_name="machine_001"
+)
+
+# 결과 확인
+print(f"이상 감지된 부품: {results['anomaly_count']}/{results['total_parts']}")
+for result in results['results']:
+    status = "🚨 이상" if result['anomaly_detected'] else "✅ 정상"
+    print(f"{result['part_name']}: {status} (확률: {result['anomaly_probability']:.3f})")
+```
+
+### 3. 배치 처리
+```python
+from main import process_multiple_wav_files
+
+# 여러 파일 동시 처리
+wav_files = ["audio1.wav", "audio2.wav", "audio3.wav"]
+results = process_multiple_wav_files(model, source_names, wav_files)
+
+print(f"처리 완료: {results['successful_files']}/{results['total_files']} 파일")
+```
+
+### 4. 커맨드 라인 실행
+```bash
+# 기본 처리
+python main.py
+
+# 통합 분석
+python integrated_analysis.py
+
+# 평가 (선택사항)
+python seperate_evaluate.py
+```
+
+## 📂 출력 폴더 구조
+
+```
+output/
+├── 2025-07-24_15-30-45_mic_1_fan.pt
+├── 2025-07-24_15-30-45_mic_1_pump.pt
+├── 2025-07-24_15-30-45_mic_2_bearing.pt
+├── 2025-07-24_15-30-45_mic_2_gearbox.pt
+└── 2025-07-24_15-30-45_mic_2_slider.pt
+```
+
+**파일명 형식**: `YYYY-MM-DD_HH-MM-SS_mic_N_PART.pt`
+- 시간 정보, 마이크 번호, 부품명이 모두 포함되어 관리 용이
+
+## 📊 시스템 아키텍처
+
+### 전체 워크플로우
+
+```
+📁 WAV 파일 (10초, 44.1kHz, mono)
+    ↓
+🔧 적응적 레벨 조정 (Adaptive Level Adjustment)
+    ↓ 
+🎵 Demucs 소스 분리 (6개 소스 → 5개 저장)
+    ↓
+🖼️ Mel Spectrogram 변환 (.pt 파일들)
+    ↓
+🤖 ONNX 이상 감지 모델
+    ↓
+📊 JSON 결과 (정상/이상 + 확률)
+```
+
+### 주요 컴포넌트
+
+1. **전처리 모듈** (`main.py`, `rms_normalize.py`)
+   - WAV 파일 로드 및 정규화
+   - 적응적 레벨 조정
+
+2. **소스 분리 모듈** (`model.py`)
+   - Demucs 모델 로드 및 추론
+   - 6개 소스 분리 (noise 제외하고 5개 저장)
+
+3. **Mel Spectrogram 변환** (`mel.py`)
+   - 오디오를 240x240 mel spectrogram으로 변환
+   - .pt 파일로 저장
+
+4. **ONNX 분류 모듈** (`onnx.py`)
+   - .pt 파일을 ONNX 모델에 입력
+   - 이상 감지 수행 및 JSON 결과 반환
+
+5. **통합 시스템** (`integrated_analysis.py`)
+   - 전체 파이프라인 통합 관리
+   - 배치 처리 및 결과 취합
 
 출력은 각 채널별로, 그리고 각 부품의 소리로 분리되어 .pt가 저장된다
 
@@ -369,3 +489,92 @@ output/
 ```
 
 > **개선점**: 파일명에 모든 정보가 포함되어 파일 관리가 용이하고, 다음 처리 단계에서 파일 경로를 쉽게 파악할 수 있습니다.
+
+---
+
+# 🔄 Version History & Changes
+
+## v2.0 - Major Architecture Refactoring (Latest)
+
+### 📋 주요 변경사항 (First Commit 이후)
+
+#### 🏗️ 아키텍처 개선
+- **역할 분리**: 단일 통합 시스템을 3개 모듈로 분리
+  - `audio_preprocessing.py`: .pt 파일 생성 전용
+  - `integrated_analysis.py`: ONNX 분류 분석 전용  
+  - `main.py`: 통합 파이프라인 실행
+- **단순화**: 복잡한 멀티 마이크 처리 로직 제거, 단일 WAV 파일 처리로 단순화
+- **타겟 부품 지정**: 사용자가 분석할 부품을 선택적으로 지정 가능
+
+#### 📁 파일 구조 변화
+**삭제된 파일들:**
+- `convert_folder_to_mel.py` - 폴더 배치 처리 로직 main.py로 통합
+- `monotostereo.py` - 스테레오 변환 로직 간소화
+- `noise_profile.py` - Spectral Gating 관련 기능 제거
+- `noise_sample.pt` - 노이즈 프로파일 샘플 제거
+- `record.py` - 실시간 녹음 기능 제거 (WAV 파일 처리로 대체)
+- `seperate_evaluate_new.py` - 평가 로직 정리
+
+**새로 추가된 파일들:**
+- `audio_preprocessing.py` - 전처리 전용 모듈 (기존 main.py에서 분리)
+
+#### 🎯 기능 개선
+- **선택적 부품 처리**: `target_parts` 매개변수로 필요한 부품만 처리
+- **효율성 향상**: 불필요한 .pt 파일 생성 방지
+- **모듈화**: 각 단계별 독립 실행 가능
+- **JSON 출력**: 구조화된 분석 결과 제공
+
+#### 🔧 설정 파일 업데이트
+- `config.py`: 새로운 아키텍처에 맞춰 설정 간소화
+- 멀티 채널 관련 설정 제거
+- 타겟 부품 지정 시스템 도입
+
+### 🚀 사용법 변화
+
+**v1.0 (First Commit):**
+```python
+# 복잡한 멀티 마이크 처리
+python main.py  # 모든 마이크, 모든 부품 처리
+```
+
+**v2.0 (Latest):**
+```python
+# 1. .pt 파일만 생성
+python audio_preprocessing.py
+
+# 2. 분석만 수행  
+python integrated_analysis.py
+
+# 3. 전체 파이프라인
+python main.py
+```
+
+### 📊 성능 개선
+- **처리 시간 단축**: 불필요한 부품 처리 건너뛰기
+- **메모리 효율성**: 선택적 부품 처리로 메모리 사용량 감소
+- **파일 관리**: 명확한 파일명 규칙으로 결과 추적 용이
+
+### 🎯 Target Parts 시스템
+```python
+# 원하는 부품만 선택적으로 처리
+target_parts = ["fan", "pump"]  # gearbox, slider, bearing 건너뛰기
+
+# 처리 결과
+✅ fan.pt 생성
+✅ pump.pt 생성  
+⏭️ slider 건너뛰기
+⏭️ bearing 건너뛰기
+⏭️ gearbox 건너뛰기
+```
+
+### 🔄 Migration Guide
+
+**기존 사용자 (v1.0):**
+1. `python main.py` → `python main.py` (동일)
+2. 단, `target_parts` 매개변수로 부품 선택 가능
+
+**새로운 사용자:**
+1. 단계별 실행: `audio_preprocessing.py` → `integrated_analysis.py`
+2. 통합 실행: `main.py`
+
+---

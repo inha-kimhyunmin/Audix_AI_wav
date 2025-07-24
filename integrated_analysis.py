@@ -1,39 +1,28 @@
 import os
 import json
-from main import process_wav_file, load_model  # 기존 main.py 함수들
+import glob
 from onnx import predict_single_file_onnx_json
 
-def process_audio_with_classification(wav_file_path, onnx_model_path, mic_number, device_name="unknown_device"):
+def process_pt_files_with_classification(pt_files, onnx_model_path, device_name="unknown_device"):
     """
-    WAV 파일을 Demucs로 분리하고 각 부품별로 ONNX 모델로 분류하는 통합 함수
+    기존 .pt 파일들을 ONNX 모델로 분류하는 함수
     
     Args:
-        wav_file_path: 입력 WAV 파일 경로
-        onnx_model_path: ONNX 분류 모델 경로
-        mic_number: 마이크 번호
+        pt_files: 분석할 .pt 파일 경로 리스트
+        onnx_model_path: ONNX 분류 모델 경로  
         device_name: 장치명
     
     Returns:
-        dict: 전체 결과를 담은 딕셔너리
+        dict: 분석 결과를 담은 딕셔너리
     """
     
-    # 1. Demucs 모델 로드
-    print("🔧 Demucs 모델 로딩 중...")
-    model, source_names = load_model()
-    
-    # 2. Demucs로 소스 분리 및 mel spectrogram 생성
-    print("🎵 Demucs 소스 분리 및 mel spectrogram 생성 중...")
-    separation_result = process_wav_file(model, source_names, wav_file_path)
-    
-    # 3. 각 분리된 소스에 대해 ONNX 분류 수행
+    # 각 .pt 파일에 대해 ONNX 분류 수행
     classification_results = []
     
-    # separation_result에서 processed_files 리스트 가져오기
-    processed_files = separation_result.get("processed_files", [])
-    
-    for result in processed_files:
-        part_name = result["part_name"]
-        pt_file_path = result["file_path"]
+    for pt_file_path in pt_files:
+        # 파일명에서 부품명 추출 (예: output/2025-07-25_01-48-11_mic_1_fan.pt -> fan)
+        filename = os.path.basename(pt_file_path)
+        part_name = filename.split('_')[-1].replace('.pt', '')
         
         print(f"🤖 {part_name} 분류 중...")
         
@@ -48,10 +37,9 @@ def process_audio_with_classification(wav_file_path, onnx_model_path, mic_number
         
         # 결과 통합
         integrated_result = {
-            "mic_number": mic_number,
             "part_name": part_name,
             "pt_file_path": pt_file_path,
-            "device_name": classification_result["device_name"],
+            "device_name": device_name,
             "anomaly_detected": classification_result["result"],
             "anomaly_probability": classification_result["probability"]
         }
@@ -61,11 +49,13 @@ def process_audio_with_classification(wav_file_path, onnx_model_path, mic_number
         print(f"✅ {part_name}: {'이상 감지' if classification_result['result'] else '정상'} "
               f"(확률: {classification_result['probability']:.3f})")
     
-    # 3. 전체 결과 정리
+    # 분석할 부품명들 추출
+    analyzed_parts = [result["part_name"] for result in classification_results]
+    
+    # 최종 결과 정리
     final_result = {
-        "input_wav_file": wav_file_path,
-        "mic_number": mic_number,
         "device_name": device_name,
+        "analyzed_parts": analyzed_parts,
         "total_parts": len(classification_results),
         "anomaly_count": sum(1 for r in classification_results if r["anomaly_detected"]),
         "results": classification_results
@@ -73,20 +63,42 @@ def process_audio_with_classification(wav_file_path, onnx_model_path, mic_number
     
     return final_result
 
+def analyze_pt_files_by_pattern(output_dir="output", onnx_model_path="ResNet18_onnx/fold0_best_model.onnx", device_name="machine_001"):
+    """
+    output 폴더에서 .pt 파일들을 찾아서 분석합니다.
+    
+    Args:
+        output_dir: .pt 파일들이 저장된 디렉토리
+        onnx_model_path: ONNX 모델 경로
+        device_name: 장치명
+    
+    Returns:
+        dict: 분석 결과
+    """
+    # output 폴더에서 .pt 파일들 찾기
+    pt_pattern = os.path.join(output_dir, "*.pt")
+    pt_files = glob.glob(pt_pattern)
+    
+    if not pt_files:
+        raise FileNotFoundError(f"❌ {output_dir} 폴더에 .pt 파일이 없습니다.")
+    
+    print(f"📁 발견된 .pt 파일들: {len(pt_files)}개")
+    for pt_file in pt_files:
+        print(f"  📄 {pt_file}")
+    
+    return process_pt_files_with_classification(pt_files, onnx_model_path, device_name)
+
 # === 사용 예시 ===
 if __name__ == "__main__":
     # 설정
-    WAV_FILE = "test01/mixture.wav"  # 입력 WAV 파일
     ONNX_MODEL = "ResNet18_onnx/fold0_best_model.onnx"  # 분류용 ONNX 모델
-    MIC_NUMBER = 1
     DEVICE_NAME = "machine_001"
     
     try:
-        # 통합 처리 실행
-        results = process_audio_with_classification(
-            wav_file_path=WAV_FILE,
+        # .pt 파일들 분석 실행
+        results = analyze_pt_files_by_pattern(
+            output_dir="output",
             onnx_model_path=ONNX_MODEL,
-            mic_number=MIC_NUMBER,
             device_name=DEVICE_NAME
         )
         
@@ -94,9 +106,8 @@ if __name__ == "__main__":
         print("\n" + "="*60)
         print("🎯 최종 분석 결과")
         print("="*60)
-        print(f"📁 입력 파일: {results['input_wav_file']}")
-        print(f"🎤 마이크: {results['mic_number']}")
         print(f"🏭 장치: {results['device_name']}")
+        print(f"🎯 분석 대상: {results['analyzed_parts']}")
         print(f"📊 분석 부품 수: {results['total_parts']}")
         print(f"⚠️ 이상 감지 부품: {results['anomaly_count']}")
         
@@ -107,7 +118,7 @@ if __name__ == "__main__":
                   f"(확률: {result['anomaly_probability']:.3f})")
         
         # JSON 파일로 저장
-        output_file = f"analysis_result_{MIC_NUMBER}_{DEVICE_NAME}.json"
+        output_file = f"analysis_result_{DEVICE_NAME}.json"
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(results, f, ensure_ascii=False, indent=2)
         
