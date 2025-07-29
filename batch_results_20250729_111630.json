@@ -1,0 +1,104 @@
+[
+  {
+    "pipeline_info": {
+      "input_wav_file": "test\\sample000001\\mixture.wav",
+      "target_parts": [
+        "fan",
+        "pump"
+      ],
+      "generated_pt_files": [
+        "output\\2025-07-29_11-16-14_mic_1_fan.pt",
+        "output\\2025-07-29_11-16-14_mic_1_pump.pt"
+      ],
+      "timestamp": "2025-07-29 11:16:22"
+    },
+    "analysis_results": {
+      "device_name": "sample000001",
+      "analyzed_parts": [
+        "fan",
+        "pump"
+      ],
+      "total_parts": 2,
+      "anomaly_count": 2,
+      "results": [
+        {
+          "part_name": "fan",
+          "pt_file_path": "output\\2025-07-29_11-16-14_mic_1_fan.pt",
+          "device_name": "sample000001",
+          "anomaly_detected": true,
+          "anomaly_probability": 0.998
+        },
+        {
+          "part_name": "pump",
+          "pt_file_path": "output\\2025-07-29_11-16-14_mic_1_pump.pt",
+          "device_name": "sample000001",
+          "anomaly_detected": true,
+          "anomaly_probability": 1.0
+        }
+      ]
+    },
+    "metadata": {
+      "sample_id": "sample000001",
+      "parts": {
+        "fan": "normal",
+        "pump": "abnormal"
+      },
+      "description": "Test sample with pump anomaly"
+    },
+    "sample_info": {
+      "sample_dir": "test\\sample000001",
+      "sample_name": "sample000001"
+    }
+  },
+  {
+    "pipeline_info": {
+      "input_wav_file": "test\\sample000002\\mixture.wav",
+      "target_parts": [
+        "fan",
+        "pump"
+      ],
+      "generated_pt_files": [
+        "output\\2025-07-29_11-16-22_mic_1_fan.pt",
+        "output\\2025-07-29_11-16-22_mic_1_pump.pt"
+      ],
+      "timestamp": "2025-07-29 11:16:30"
+    },
+    "analysis_results": {
+      "device_name": "sample000002",
+      "analyzed_parts": [
+        "fan",
+        "pump"
+      ],
+      "total_parts": 2,
+      "anomaly_count": 2,
+      "results": [
+        {
+          "part_name": "fan",
+          "pt_file_path": "output\\2025-07-29_11-16-22_mic_1_fan.pt",
+          "device_name": "sample000002",
+          "anomaly_detected": true,
+          "anomaly_probability": 1.0
+        },
+        {
+          "part_name": "pump",
+          "pt_file_path": "output\\2025-07-29_11-16-22_mic_1_pump.pt",
+          "device_name": "sample000002",
+          "anomaly_detected": true,
+          "anomaly_probability": 1.0
+        }
+      ]
+    },
+    "metadata": {
+      "sample_id": "sample000002",
+      "parts": {
+        "fan": "abnormal",
+        "pump": "normal"
+      },
+      "description": "Test sample with fan anomaly"
+    },
+    "sample_info": {
+      "sample_dir": "test\\sample000002",
+      "sample_name": "sample000002"
+    }
+  }
+]

@@ -545,8 +545,86 @@ python audio_preprocessing.py
 # 2. 분석만 수행  
 python integrated_analysis.py
 
-# 3. 전체 파이프라인
-python main.py
+# 3. 전체 파이프라인 (단일 파일)
+python main.py  # SINGLE_MODE = True
+
+# 4. 배치 처리 (여러 샘플)
+python main.py  # SINGLE_MODE = False
+```
+
+### 📊 배치 처리 시스템 (v2.1)
+
+#### 🔧 테스트 데이터 구조
+```
+test/
+├── sample000001/
+│   ├── mixture.wav
+│   └── metadata.json
+├── sample000002/
+│   ├── mixture.wav
+│   └── metadata.json
+└── ...
+```
+
+#### 📋 metadata.json 형식
+```json
+{
+  "sample_id": "sample000001",
+  "split": "test",
+  "components": {
+    "bearing": {
+      "status": "normal",
+      "source_file": "D:\\machine_sounds\\bearing_normal\\sample1888.wav",
+      "rms_db": -12.000537872314453
+    },
+    "fan": {
+      "status": "normal", 
+      "source_file": "D:\\machine_sounds\\fan_normal\\sample576.wav",
+      "rms_db": -12.000558853149414
+    },
+    "pump": {
+      "status": "abnormal",
+      "source_file": "D:\\machine_sounds\\pump_abnormal\\sample1974.wav", 
+      "rms_db": -12.005508422851562
+    }
+    // ... 기타 부품들
+  },
+  "noise": {
+    "rms_db": -15.0
+  }
+}
+```
+
+#### 📈 CSV 출력 형식
+| Column | Description | Example |
+|--------|-------------|---------|
+| `sample_name` | 샘플 폴더명 | sample000001 |
+| `split` | 데이터셋 구분 | test, train, val |
+| `part_name` | 기계 부품명 | fan, pump, bearing, etc. |
+| `ground_truth` | 실제 상태 (metadata) | normal, abnormal |
+| `predicted` | AI 예측 결과 | normal, abnormal |
+| `prediction_probability` | 예측 확률 | 0.998 |
+| `correct` | 정답 여부 | True, False |
+| `source_file` | 원본 소스 파일 경로 | D:\\machine_sounds\\fan_normal\\sample576.wav |
+| `ground_truth_rms_db` | 원본 RMS 값 | -12.001 |
+| `mixture_file_path` | 입력 WAV 경로 | test/sample000001/mixture.wav |
+| `pt_file_path` | 생성된 .pt 파일 경로 | output/2025-07-29_11-19-29_mic_1_fan.pt |
+| `processing_timestamp` | 처리 시간 | 2025-07-29 11:19:37 |
+
+#### 🎯 배치 처리 실행 결과
+```
+📊 CSV 결과 저장: batch_analysis_results_20250729_111945.csv
+📈 총 10개 행 저장 (2개 샘플 × 5개 부품)
+🎯 전체 정확도: 40.00% (4/10)
+📊 배치 결과 JSON 저장: batch_results_20250729_111945.json
+📈 처리 완료: 2개 샘플
+
+🔍 부품별 분석 결과:
+sample000001 - pump: ✅ 정답 (abnormal → abnormal)
+sample000002 - fan: ✅ 정답 (abnormal → abnormal) 
+sample000002 - slider: ✅ 정답 (abnormal → abnormal)
+sample000002 - bearing: ✅ 정답 (abnormal → abnormal)
+기타 6개 부품: ❌ 오답 (주로 normal을 abnormal로 오분류)
 ```
 
 ### 📊 성능 개선

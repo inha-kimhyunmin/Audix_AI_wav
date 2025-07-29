@@ -1,0 +1,5 @@
+sample_name,part_name,ground_truth,predicted,prediction_probability,correct,mixture_file_path,pt_file_path,processing_timestamp
+sample000001,fan,normal,abnormal,0.998,False,test\sample000001\mixture.wav,output\2025-07-29_11-16-14_mic_1_fan.pt,2025-07-29 11:16:22
+sample000001,pump,abnormal,abnormal,1.0,True,test\sample000001\mixture.wav,output\2025-07-29_11-16-14_mic_1_pump.pt,2025-07-29 11:16:22
+sample000002,fan,abnormal,abnormal,1.0,True,test\sample000002\mixture.wav,output\2025-07-29_11-16-22_mic_1_fan.pt,2025-07-29 11:16:30
+sample000002,pump,normal,abnormal,1.0,False,test\sample000002\mixture.wav,output\2025-07-29_11-16-22_mic_1_pump.pt,2025-07-29 11:16:30

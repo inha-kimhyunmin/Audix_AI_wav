@@ -1,0 +1,34 @@
+{
+  "sample_id": "sample000002",
+  "split": "test", 
+  "components": {
+    "bearing": {
+      "status": "abnormal",
+      "source_file": "D:\\machine_sounds\\bearing_abnormal\\sample999.wav",
+      "rms_db": -11.995537872314453
+    },
+    "fan": {
+      "status": "abnormal",
+      "source_file": "D:\\machine_sounds\\fan_abnormal\\sample321.wav",
+      "rms_db": -12.002558853149414
+    },
+    "gearbox": {
+      "status": "normal",
+      "source_file": "D:\\machine_sounds\\gearbox_normal\\sample888.wav",
+      "rms_db": -12.001463485717773
+    },
+    "pump": {
+      "status": "normal",
+      "source_file": "D:\\machine_sounds\\pump_normal\\sample555.wav",
+      "rms_db": -12.003508422851562
+    },
+    "slider": {
+      "status": "abnormal",
+      "source_file": "D:\\machine_sounds\\slider_abnormal\\sample777.wav",
+      "rms_db": -12.001223159790039
+    }
+  },
+  "noise": {
+    "rms_db": -15.0
+  }
+}

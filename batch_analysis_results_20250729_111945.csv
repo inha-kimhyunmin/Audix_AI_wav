@@ -1,0 +1,11 @@
+sample_name,split,part_name,ground_truth,predicted,prediction_probability,correct,source_file,ground_truth_rms_db,mixture_file_path,pt_file_path,processing_timestamp
+sample000001,test,fan,normal,abnormal,1.0,False,D:\machine_sounds\fan_normal\sample576.wav,-12.001,test\sample000001\mixture.wav,output\2025-07-29_11-19-29_mic_1_fan.pt,2025-07-29 11:19:37
+sample000001,test,pump,abnormal,abnormal,0.999,True,D:\machine_sounds\pump_abnormal\sample1974.wav,-12.006,test\sample000001\mixture.wav,output\2025-07-29_11-19-29_mic_1_pump.pt,2025-07-29 11:19:37
+sample000001,test,slider,normal,abnormal,0.994,False,D:\machine_sounds\slider_normal\sample1471.wav,-12.0,test\sample000001\mixture.wav,output\2025-07-29_11-19-29_mic_1_slider.pt,2025-07-29 11:19:37
+sample000001,test,bearing,normal,abnormal,0.998,False,D:\machine_sounds\bearing_normal\sample1888.wav,-12.001,test\sample000001\mixture.wav,output\2025-07-29_11-19-29_mic_1_bearing.pt,2025-07-29 11:19:37
+sample000001,test,gearbox,normal,abnormal,1.0,False,D:\machine_sounds\gearbox_normal\sample1648.wav,-12.0,test\sample000001\mixture.wav,output\2025-07-29_11-19-29_mic_1_gearbox.pt,2025-07-29 11:19:37
+sample000002,test,fan,abnormal,abnormal,1.0,True,D:\machine_sounds\fan_abnormal\sample321.wav,-12.003,test\sample000002\mixture.wav,output\2025-07-29_11-19-37_mic_1_fan.pt,2025-07-29 11:19:45
+sample000002,test,pump,normal,abnormal,1.0,False,D:\machine_sounds\pump_normal\sample555.wav,-12.004,test\sample000002\mixture.wav,output\2025-07-29_11-19-37_mic_1_pump.pt,2025-07-29 11:19:45
+sample000002,test,slider,abnormal,abnormal,0.995,True,D:\machine_sounds\slider_abnormal\sample777.wav,-12.001,test\sample000002\mixture.wav,output\2025-07-29_11-19-37_mic_1_slider.pt,2025-07-29 11:19:45
+sample000002,test,bearing,abnormal,abnormal,1.0,True,D:\machine_sounds\bearing_abnormal\sample999.wav,-11.996,test\sample000002\mixture.wav,output\2025-07-29_11-19-37_mic_1_bearing.pt,2025-07-29 11:19:45
+sample000002,test,gearbox,normal,abnormal,0.999,False,D:\machine_sounds\gearbox_normal\sample888.wav,-12.001,test\sample000002\mixture.wav,output\2025-07-29_11-19-37_mic_1_gearbox.pt,2025-07-29 11:19:45

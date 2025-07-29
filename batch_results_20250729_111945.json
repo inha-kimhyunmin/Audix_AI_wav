@@ -1,0 +1,216 @@
+[
+  {
+    "pipeline_info": {
+      "input_wav_file": "test\\sample000001\\mixture.wav",
+      "target_parts": [
+        "bearing",
+        "fan",
+        "gearbox",
+        "pump",
+        "slider"
+      ],
+      "generated_pt_files": [
+        "output\\2025-07-29_11-19-29_mic_1_fan.pt",
+        "output\\2025-07-29_11-19-29_mic_1_pump.pt",
+        "output\\2025-07-29_11-19-29_mic_1_slider.pt",
+        "output\\2025-07-29_11-19-29_mic_1_bearing.pt",
+        "output\\2025-07-29_11-19-29_mic_1_gearbox.pt"
+      ],
+      "timestamp": "2025-07-29 11:19:37"
+    },
+    "analysis_results": {
+      "device_name": "sample000001",
+      "analyzed_parts": [
+        "fan",
+        "pump",
+        "slider",
+        "bearing",
+        "gearbox"
+      ],
+      "total_parts": 5,
+      "anomaly_count": 5,
+      "results": [
+        {
+          "part_name": "fan",
+          "pt_file_path": "output\\2025-07-29_11-19-29_mic_1_fan.pt",
+          "device_name": "sample000001",
+          "anomaly_detected": true,
+          "anomaly_probability": 1.0
+        },
+        {
+          "part_name": "pump",
+          "pt_file_path": "output\\2025-07-29_11-19-29_mic_1_pump.pt",
+          "device_name": "sample000001",
+          "anomaly_detected": true,
+          "anomaly_probability": 0.999
+        },
+        {
+          "part_name": "slider",
+          "pt_file_path": "output\\2025-07-29_11-19-29_mic_1_slider.pt",
+          "device_name": "sample000001",
+          "anomaly_detected": true,
+          "anomaly_probability": 0.994
+        },
+        {
+          "part_name": "bearing",
+          "pt_file_path": "output\\2025-07-29_11-19-29_mic_1_bearing.pt",
+          "device_name": "sample000001",
+          "anomaly_detected": true,
+          "anomaly_probability": 0.998
+        },
+        {
+          "part_name": "gearbox",
+          "pt_file_path": "output\\2025-07-29_11-19-29_mic_1_gearbox.pt",
+          "device_name": "sample000001",
+          "anomaly_detected": true,
+          "anomaly_probability": 1.0
+        }
+      ]
+    },
+    "metadata": {
+      "sample_id": "sample000001",
+      "split": "test",
+      "components": {
+        "bearing": {
+          "status": "normal",
+          "source_file": "D:\\machine_sounds\\bearing_normal\\sample1888.wav",
+          "rms_db": -12.000537872314453
+        },
+        "fan": {
+          "status": "normal",
+          "source_file": "D:\\machine_sounds\\fan_normal\\sample576.wav",
+          "rms_db": -12.000558853149414
+        },
+        "gearbox": {
+          "status": "normal",
+          "source_file": "D:\\machine_sounds\\gearbox_normal\\sample1648.wav",
+          "rms_db": -12.000463485717773
+        },
+        "pump": {
+          "status": "abnormal",
+          "source_file": "D:\\machine_sounds\\pump_abnormal\\sample1974.wav",
+          "rms_db": -12.005508422851562
+        },
+        "slider": {
+          "status": "normal",
+          "source_file": "D:\\machine_sounds\\slider_normal\\sample1471.wav",
+          "rms_db": -12.000223159790039
+        }
+      },
+      "noise": {
+        "rms_db": -15.0
+      }
+    },
+    "sample_info": {
+      "sample_dir": "test\\sample000001",
+      "sample_name": "sample000001"
+    }
+  },
+  {
+    "pipeline_info": {
+      "input_wav_file": "test\\sample000002\\mixture.wav",
+      "target_parts": [
+        "bearing",
+        "fan",
+        "gearbox",
+        "pump",
+        "slider"
+      ],
+      "generated_pt_files": [
+        "output\\2025-07-29_11-19-37_mic_1_fan.pt",
+        "output\\2025-07-29_11-19-37_mic_1_pump.pt",
+        "output\\2025-07-29_11-19-37_mic_1_slider.pt",
+        "output\\2025-07-29_11-19-37_mic_1_bearing.pt",
+        "output\\2025-07-29_11-19-37_mic_1_gearbox.pt"
+      ],
+      "timestamp": "2025-07-29 11:19:45"
+    },
+    "analysis_results": {
+      "device_name": "sample000002",
+      "analyzed_parts": [
+        "fan",
+        "pump",
+        "slider",
+        "bearing",
+        "gearbox"
+      ],
+      "total_parts": 5,
+      "anomaly_count": 5,
+      "results": [
+        {
+          "part_name": "fan",
+          "pt_file_path": "output\\2025-07-29_11-19-37_mic_1_fan.pt",
+          "device_name": "sample000002",
+          "anomaly_detected": true,
+          "anomaly_probability": 1.0
+        },
+        {
+          "part_name": "pump",
+          "pt_file_path": "output\\2025-07-29_11-19-37_mic_1_pump.pt",
+          "device_name": "sample000002",
+          "anomaly_detected": true,
+          "anomaly_probability": 1.0
+        },
+        {
+          "part_name": "slider",
+          "pt_file_path": "output\\2025-07-29_11-19-37_mic_1_slider.pt",
+          "device_name": "sample000002",
+          "anomaly_detected": true,
+          "anomaly_probability": 0.995
+        },
+        {
+          "part_name": "bearing",
+          "pt_file_path": "output\\2025-07-29_11-19-37_mic_1_bearing.pt",
+          "device_name": "sample000002",
+          "anomaly_detected": true,
+          "anomaly_probability": 1.0
+        },
+        {
+          "part_name": "gearbox",
+          "pt_file_path": "output\\2025-07-29_11-19-37_mic_1_gearbox.pt",
+          "device_name": "sample000002",
+          "anomaly_detected": true,
+          "anomaly_probability": 0.999
+        }
+      ]
+    },
+    "metadata": {
+      "sample_id": "sample000002",
+      "split": "test",
+      "components": {
+        "bearing": {
+          "status": "abnormal",
+          "source_file": "D:\\machine_sounds\\bearing_abnormal\\sample999.wav",
+          "rms_db": -11.995537872314452
+        },
+        "fan": {
+          "status": "abnormal",
+          "source_file": "D:\\machine_sounds\\fan_abnormal\\sample321.wav",
+          "rms_db": -12.002558853149415
+        },
+        "gearbox": {
+          "status": "normal",
+          "source_file": "D:\\machine_sounds\\gearbox_normal\\sample888.wav",
+          "rms_db": -12.001463485717773
+        },
+        "pump": {
+          "status": "normal",
+          "source_file": "D:\\machine_sounds\\pump_normal\\sample555.wav",
+          "rms_db": -12.003508422851562
+        },
+        "slider": {
+          "status": "abnormal",
+          "source_file": "D:\\machine_sounds\\slider_abnormal\\sample777.wav",
+          "rms_db": -12.001223159790039
+        }
+      },
+      "noise": {
+        "rms_db": -15.0
+      }
+    },
+    "sample_info": {
+      "sample_dir": "test\\sample000002",
+      "sample_name": "sample000002"
+    }
+  }
+]
