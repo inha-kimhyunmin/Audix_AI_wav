@@ -2,3 +2,11 @@
 model/
 output/
 ResNet18_onnx/
+test2/
+test01/
+test/
+
+.csv
+.json
+.pt
+ 

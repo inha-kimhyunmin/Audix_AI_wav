@@ -327,7 +327,9 @@ def save_results_to_csv(batch_results, csv_filename=None):
             probability = analysis.get('anomaly_probability', 0.0)
             
             # 정답 여부 계산
-            correct = (ground_truth == predicted)
+            # ground_truth가 'faulty'면 'abnormal'로 간주
+            gt_for_compare = 'abnormal' if ground_truth == 'faulty' else ground_truth
+            correct = (gt_for_compare == predicted)
             
             # 해당 부품의 .pt 파일 경로 찾기
             pt_file_path = ''
@@ -410,7 +412,7 @@ if __name__ == "__main__":
     
     else:
         # === 배치 처리 모드 ===
-        TEST_DIR = "test"  # test 디렉토리 경로
+        TEST_DIR = "test2"  # test 디렉토리 경로
         TARGET_PARTS = None  # None이면 metadata에서 자동 추출
         ONNX_MODEL = "ResNet18_onnx/fold0_best_model.onnx"  # ONNX 모델
         
