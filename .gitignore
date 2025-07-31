@@ -2,3 +2,5 @@
 model/
 output/
 ResNet18_onnx/
+
+.csv
