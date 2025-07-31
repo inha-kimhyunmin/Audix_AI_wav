@@ -4,3 +4,5 @@ output/
 ResNet18_onnx/
 
 .csv
+.json
+test/

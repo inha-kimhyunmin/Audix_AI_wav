@@ -13,14 +13,14 @@ from resample import init_resampler
 # 2단계: .pt 파일 분석 (integrated_analysis.py)  
 from integrated_analysis import process_pt_files_with_classification
 
-def main_pipeline(wav_file_path, target_parts, onnx_model_path="ResNet18_onnx/fold0_best_model.onnx", device_name="machine_001"):
+def main_pipeline(wav_file_path, target_parts, onnx_model_base_path="ResNet18_onnx", device_name="machine_001"):
     """
     완전한 파이프라인: WAV 파일 → .pt 파일 생성 → ONNX 분류 분석
     
     Args:
         wav_file_path: 입력 WAV 파일 경로
         target_parts: 분석할 부품 리스트 (예: ['fan', 'pump'])
-        onnx_model_path: ONNX 분류 모델 경로
+        onnx_model_base_path: ONNX 모델들이 저장된 폴더 경로
         device_name: 장치명
     
     Returns:
@@ -52,12 +52,12 @@ def main_pipeline(wav_file_path, target_parts, onnx_model_path="ResNet18_onnx/fo
             print(f"  📄 {file_path}")
         
         # === 2단계: .pt 파일 분석 ===
-        print(f"\n📋 2단계: ONNX 모델로 분류 분석")
-        print(f"🤖 ONNX 모델: {onnx_model_path}")
+        print(f"\n📋 2단계: 각 부품별 전용 ONNX 모델로 분류 분석")
+        print(f"🤖 ONNX 모델 폴더: {onnx_model_base_path}")
         
         analysis_results = process_pt_files_with_classification(
             pt_files=generated_files,
-            onnx_model_path=onnx_model_path,
+            onnx_model_base_path=onnx_model_base_path,
             device_name=device_name
         )
         
@@ -103,8 +103,9 @@ def print_final_results(results):
     print("\n📋 상세 결과:")
     for result in analysis['results']:
         status = "🚨 이상" if result['anomaly_detected'] else "✅ 정상"
+        model_info = f", 모델: {result['model_used']}" if 'model_used' in result else ""
         print(f"  {result['part_name']}: {status} "
-              f"(확률: {result['anomaly_probability']:.3f})")
+              f"(확률: {result['anomaly_probability']:.3f}{model_info})")
     
     # 생성된 파일들
     print(f"\n📄 생성된 .pt 파일들:")
@@ -130,8 +131,8 @@ def save_results_to_json(results, output_filename=None):
 if __name__ == "__main__":
     # 설정값들
     WAV_FILE = "test01/mixture.wav"  # 입력 WAV 파일
-    TARGET_PARTS = ["fan", "pump"]   # 분석할 부품들
-    ONNX_MODEL = "ResNet18_onnx/fold0_best_model.onnx"  # ONNX 모델
+    TARGET_PARTS = ["fan", "pump", "slider", "gearbox", "bearing"]   # 분석할 부품들
+    ONNX_MODEL_BASE_PATH = "ResNet18_onnx"  # ONNX 모델들이 저장된 폴더
     DEVICE_NAME = "machine_001"      # 장치명
     
     try:
@@ -139,7 +140,7 @@ if __name__ == "__main__":
         results = main_pipeline(
             wav_file_path=WAV_FILE,
             target_parts=TARGET_PARTS,
-            onnx_model_path=ONNX_MODEL,
+            onnx_model_base_path=ONNX_MODEL_BASE_PATH,
             device_name=DEVICE_NAME
         )
         
