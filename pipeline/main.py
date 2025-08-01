@@ -7,7 +7,8 @@ import sys
 from datetime import datetime
 
 # 1단계: .pt 파일 생성 (audio_preprocessing.py)
-from audio_preprocessing import process_wav_file, load_model
+from audio_preprocessing import process_wav_file
+from model import load_model
 from resample import init_resampler
 
 # 2단계: .pt 파일 분석 (integrated_analysis.py)  
@@ -130,9 +131,9 @@ def save_results_to_json(results, output_filename=None):
 # === 메인 실행 부분 ===
 if __name__ == "__main__":
     # 설정값들
-    WAV_FILE = "test01/mixture.wav"  # 입력 WAV 파일
+    WAV_FILE = "../test01/mixture.wav"  # 입력 WAV 파일
     TARGET_PARTS = ["fan", "pump", "slider", "gearbox", "bearing"]   # 분석할 부품들
-    ONNX_MODEL_BASE_PATH = "ResNet18_onnx"  # ONNX 모델들이 저장된 폴더
+    ONNX_MODEL_BASE_PATH = "../model/onnx"  # ONNX 모델들이 저장된 폴더
     DEVICE_NAME = "machine_001"      # 장치명
     
     try:

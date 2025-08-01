@@ -1,10 +1,14 @@
 import torch
+import os
+
+# 프로젝트 루트 디렉토리 찾기
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SAMPLE_RATE = 44100
 MEL_SAMPLE_RATE = 16000
 SEGMENT_DURATION = 10
 MEL_SIZE = (240, 240)
-MODEL_PATH = "model/6a76e118.th"
+MODEL_PATH = os.path.join(BASE_DIR, "model", "demucs", "6a76e118.th")
 NOISE_SAMPLE_PATH = "noise_sample.pt"
 OUTPUT_FOLDER = "output"
 #DEVICE = torch.device("cpu")

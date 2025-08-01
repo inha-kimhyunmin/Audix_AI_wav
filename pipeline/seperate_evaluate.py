@@ -2,7 +2,7 @@ import os
 import torchaudio
 import torch
 import numpy as np
-from model import load_model, separate  # 너의 Demucs 로딩 함수 사용
+from .model import load_model, separate  # 너의 Demucs 로딩 함수 사용
 from rms_normalize import adaptive_level_adjust  # 적응적 레벨 조정 사용 (main.py와 동일)
 from config import SOURCES as CONFIG_SOURCES  # config.py의 SOURCES 사용
 from pathlib import Path
